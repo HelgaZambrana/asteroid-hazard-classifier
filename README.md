@@ -14,12 +14,20 @@ Desarrollado en el contexto del lanzamiento de Artemis II (abril 2026).
 
 ## Estructura
 
-    asteroid-classifier/
-    ├── notebooks/
-    │   ├── 01_api_exploration.ipynb   # Exploración inicial de la API
-    │   └── 02_etl.ipynb               # Pipeline de extracción y carga
-    ├── .env.example                   # Variables de entorno necesarias
-    └── README.md
+asteroid-classifier/
+├── data/                          # Generado localmente, no se sube al repo
+│   ├── X_train.csv                # Correr 04_preprocessing.ipynb para generar
+│   ├── X_test.csv
+│   ├── y_train.csv
+│   ├── y_test.csv
+│   └── scaler.pkl
+├── notebooks/
+│   ├── 01_api_exploration.ipynb
+│   ├── 02_etl.ipynb
+│   ├── 03_eda.ipynb
+│   └── 04_preprocessing.ipynb
+├── .env.example
+└── README.md
 
 ## Variables de entorno
 
