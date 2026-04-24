@@ -1,4 +1,4 @@
-# Asteroid Hazard Classifier 🚀
+# Asteroid Hazard Classifier
 
 Proyecto de Machine Learning para clasificar asteroides cercanos a la Tierra 
 como potencialmente peligrosos o no, usando datos en tiempo real de la NASA.
