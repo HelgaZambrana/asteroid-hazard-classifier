@@ -10,3 +10,7 @@ data/*.parquet
 data/*.pkl
 
 mlruns/
+
+.DS_Store
+mlflow.db
+*.db
