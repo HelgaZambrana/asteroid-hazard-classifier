@@ -1,6 +1,6 @@
 # Asteroid Hazard Classifier
 
-![NasaAsteroidsBanner](NasaAsteroidsBanner.png)
+![NasaAsteroidsBanner](assets/NasaAsteroidsBanner.png)
 
 Pipeline ML end-to-end para clasificar asteroides cercanos a la Tierra
 como potencialmente peligrosos, usando datos en tiempo real de la NASA.
