@@ -2,10 +2,13 @@
 
 ![NasaAsteroidsBanner](assets/NasaAsteroidsBanner.png)
 
-Pipeline ML end-to-end para clasificar asteroides cercanos a la Tierra
-como potencialmente peligrosos, usando datos en tiempo real de la NASA.
+Pipeline ML end-to-end para clasificar asteroides cercanos a la Tierra como potencialmente peligrosos, utilizando datos en tiempo real de la NASA.
 
 Desarrollado en el contexto del lanzamiento de Artemis II (abril 2026).
+
+En este contexto, “potencialmente peligroso” sigue la definición de la NASA para un Potentially Hazardous Asteroid (PHA): un objeto con una distancia mínima de intersección orbital (MOID) menor o igual a 0.05 AU y una magnitud absoluta H ≤ 22 (aproximadamente ≥ 140 metros de diámetro). Esta clasificación no implica un impacto inminente, sino que identifica objetos lo suficientemente grandes y cercanos como para requerir monitoreo.
+
+En la práctica, organismos como el Center for Near Earth Object Studies realizan un seguimiento continuo de estos objetos, refinando sus órbitas a medida que se incorporan nuevas observaciones y evaluando probabilidades de impacto. La mayoría permanece en niveles de riesgo despreciables, pero esta clasificación permite priorizar el seguimiento y el análisis a largo plazo.
 
 ## Stack
 
