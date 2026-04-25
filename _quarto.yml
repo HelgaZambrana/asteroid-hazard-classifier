@@ -29,7 +29,8 @@ format:
   html:
     theme: darkly
     code-fold: true
-
+    plotly-connected: true
+    
 jupyter:
   kernelspec:
     name: asteroid-venv
