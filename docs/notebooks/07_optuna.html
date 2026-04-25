@@ -203,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>GridSearchCV exploró 27 combinaciones fijas de hiperparámetros sin mejorar el modelo base. Optuna implementa búsqueda bayesiana: cada trial informa al siguiente mediante un modelo probabilístico del espacio de búsqueda, concentrando los intentos en las regiones más prometedoras en lugar de exploración exhaustiva.</p>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">1. Setup</h2>
-<div id="381ec645" class="cell" data-execution_count="13">
+<div id="381ec645" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> optuna</span>
@@ -239,7 +239,7 @@ X_train: (18093, 4)</code></pre>
 <p><code>subsample</code> (0.6-1.0): fracción del dataset usada por cada árbol. Introduce variabilidad entre árboles, reduciendo overfitting. No estaba en GridSearchCV.</p>
 <p><code>colsample_bytree</code> (0.6-1.0): fracción de features usada por cada árbol. Mecanismo análogo a subsample pero sobre columnas en lugar de filas. No estaba en GridSearchCV.</p>
 <p><code>scale_pos_weight</code>: fijo, calculado como ratio no_peligrosos/peligrosos. Compensa el desbalance de clases, no se incluye en la búsqueda.</p>
-<div id="301ee112" class="cell" data-execution_count="14">
+<div id="301ee112" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>scale_pos_weight <span class="op">=</span> y_train.value_counts()[<span class="va">False</span>] <span class="op">/</span> y_train.value_counts()[<span class="va">True</span>]</span>
@@ -271,7 +271,7 @@ X_train: (18093, 4)</code></pre>
 <section id="ejecución-del-estudio" class="level2">
 <h2 class="anchored" data-anchor-id="ejecución-del-estudio">3. Ejecución del estudio</h2>
 <p>50 trials con validación cruzada de 5 folds por trial. Optuna selecciona los parámetros de cada trial basándose en los resultados anteriores mediante el algoritmo TPE (Tree-structured Parzen Estimator).</p>
-<div id="5b5656c9" class="cell" data-execution_count="15">
+<div id="5b5656c9" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>study <span class="op">=</span> optuna.create_study(direction<span class="op">=</span><span class="st">'maximize'</span>)</span>
@@ -284,25 +284,25 @@ X_train: (18093, 4)</code></pre>
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"e2eaed26c62949c0b00544d205abb899","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"d676c80eb23a439e8f0dcd45426e5f8b","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-Mejor F1 Macro: 0.7485
+Mejor F1 Macro: 0.7482
 
 Mejores parámetros:
-  n_estimators: 372
-  max_depth: 9
-  learning_rate: 0.039995667517537435
-  subsample: 0.7711279827052936
-  colsample_bytree: 0.9613770334044456</code></pre>
+  n_estimators: 191
+  max_depth: 7
+  learning_rate: 0.23994732507862512
+  subsample: 0.9376177739515632
+  colsample_bytree: 0.8949651477283558</code></pre>
 </div>
 </div>
 </section>
 <section id="evaluación-del-modelo-optimizado" class="level2">
 <h2 class="anchored" data-anchor-id="evaluación-del-modelo-optimizado">4. Evaluación del modelo optimizado</h2>
-<div id="690f6220" class="cell" data-execution_count="16">
+<div id="690f6220" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report</span>
@@ -329,20 +329,20 @@ Mejores parámetros:
 <pre><code>XGBoost + Optuna
               precision    recall  f1-score   support
 
-No peligroso       0.99      0.94      0.96      4272
-   Peligroso       0.44      0.77      0.56       252
+No peligroso       0.98      0.96      0.97      4272
+   Peligroso       0.48      0.66      0.55       252
 
-    accuracy                           0.93      4524
-   macro avg       0.71      0.86      0.76      4524
-weighted avg       0.96      0.93      0.94      4524
+    accuracy                           0.94      4524
+   macro avg       0.73      0.81      0.76      4524
+weighted avg       0.95      0.94      0.94      4524
 </code></pre>
 </div>
 </div>
 </section>
 <section id="comparativa-final" class="level2">
 <h2 class="anchored" data-anchor-id="comparativa-final">5. Comparativa final</h2>
-<p>Optuna mejoró marginalmente el F1 Macro (0.760 vs 0.753 del base) pero redujo el recall de 0.798 a 0.770. En el contexto de detección de asteroides peligrosos, el recall es la métrica prioritaria.</p>
-<p>El modelo final es el XGBoost base con umbral de decisión 0.20, que detecta el 92.9% de los asteroides peligrosos reales. Ver análisis completo en 06_shap.ipynb.</p>
+<p>Optuna mejoró levemente el F1 Macro sobre el modelo base (0.760 vs 0.753), ganando precision (0.48 vs 0.41) a costa de recall (0.66 vs 0.80).</p>
+<p>El modelo final seleccionado sigue siendo el XGBoost base con umbral 0.20 porque prioriza recall sobre precision en el contexto de detección de asteroides peligrosos. Ver análisis completo en 06_shap.ipynb.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -360,17 +360,17 @@ weighted avg       0.96      0.93      0.94      4524
 <tr class="even">
 <td>F1 Peligroso</td>
 <td>0.545</td>
-<td>0.560</td>
+<td>0.550</td>
 </tr>
 <tr class="odd">
 <td>Recall Peligroso</td>
 <td>0.798</td>
-<td>0.770</td>
+<td>0.660</td>
 </tr>
 <tr class="even">
 <td>Precision Peligroso</td>
 <td>0.414</td>
-<td>0.440</td>
+<td>0.480</td>
 </tr>
 </tbody>
 </table>
@@ -379,6 +379,9 @@ weighted avg       0.96      0.93      0.94      4524
 </section>
 
 </main> <!-- /main -->
+<script type="application/vnd.jupyter.widget-state+json">
+{"state":{"05a3444b57d84416a8d0394f90a56928":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_48656b5a9df64fdc9f32949134fca18d","IPY_MODEL_aa6e12d60ec34293bb8ba2a676b996fc","IPY_MODEL_cb7281ebe68a44458b34293d7db1d64c"],"layout":"IPY_MODEL_a36a6b235dd141fc89c35e28bc997108","tabbable":null,"tooltip":null}},"070d4d71568e41e8a3b50b26efc821a3":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"0cbd28a4b1fb4f7e85a7dbccc257d9cf":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"0e64a33a66bd47a1bf8997c8a2672155":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"48656b5a9df64fdc9f32949134fca18d":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_6bc2bd4df88e4d77b86f6765cc9caf39","placeholder":"​","style":"IPY_MODEL_0e64a33a66bd47a1bf8997c8a2672155","tabbable":null,"tooltip":null,"value":"Best trial: 49. Best value: 0.744815: 100%"}},"6bc2bd4df88e4d77b86f6765cc9caf39":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"a36a6b235dd141fc89c35e28bc997108":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"aa6e12d60ec34293bb8ba2a676b996fc":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_0cbd28a4b1fb4f7e85a7dbccc257d9cf","max":50,"min":0,"orientation":"horizontal","style":"IPY_MODEL_d381c383c7274237938f71bf047e683c","tabbable":null,"tooltip":null,"value":50}},"ad4f2eb84b144305abebd1fbe8b69b5f":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"cb7281ebe68a44458b34293d7db1d64c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_070d4d71568e41e8a3b50b26efc821a3","placeholder":"​","style":"IPY_MODEL_ad4f2eb84b144305abebd1fbe8b69b5f","tabbable":null,"tooltip":null,"value":" 50/50 [01:36&lt;00:00,  2.00s/it]"}},"d381c383c7274237938f71bf047e683c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}}},"version_major":2,"version_minor":0}
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

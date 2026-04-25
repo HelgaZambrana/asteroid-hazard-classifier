@@ -199,7 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Análisis visual del dataset y resultados del modelo. Desarrollado con Plotly para interactividad.</p>
 <section id="setup-y-carga-de-datos" class="level2">
 <h2 class="anchored" data-anchor-id="setup-y-carga-de-datos">1. Setup y carga de datos</h2>
-<div id="9f57f5f4" class="cell" data-execution_count="26">
+<div id="9f57f5f4" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -223,7 +223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="qué-vemos-en-los-datos">2. Qué vemos en los datos</h2>
 <section id="velocidad-vs-distancia-de-acercamiento" class="level3">
 <h3 class="anchored" data-anchor-id="velocidad-vs-distancia-de-acercamiento">Velocidad vs distancia de acercamiento</h3>
-<div id="4f538f9a" class="cell" data-execution_count="27">
+<div id="4f538f9a" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.scatter(</span>
@@ -258,7 +258,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="timeline-de-asteroides-detectados-por-mes" class="level3">
 <h3 class="anchored" data-anchor-id="timeline-de-asteroides-detectados-por-mes">Timeline de asteroides detectados por mes</h3>
-<div id="ad05c180" class="cell" data-execution_count="28">
+<div id="ad05c180" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'close_approach_date'</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">'close_approach_date'</span>])</span>
@@ -300,7 +300,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="qué-aprendió-el-modelo">3. Qué aprendió el modelo</h2>
 <section id="magnitud-absoluta-vs-probabilidad-de-peligrosidad" class="level3">
 <h3 class="anchored" data-anchor-id="magnitud-absoluta-vs-probabilidad-de-peligrosidad">Magnitud absoluta vs probabilidad de peligrosidad</h3>
-<div id="e5101d6a" class="cell" data-execution_count="29">
+<div id="e5101d6a" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>checkpoint <span class="op">=</span> joblib.load(<span class="st">'../data/xgboost_final.pkl'</span>)</span>
@@ -368,7 +368,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="top-15-asteroides-con-mayor-probabilidad-de-ser-peligrosos" class="level3">
 <h3 class="anchored" data-anchor-id="top-15-asteroides-con-mayor-probabilidad-de-ser-peligrosos">Top 15 asteroides con mayor probabilidad de ser peligrosos</h3>
-<div id="14b174a5" class="cell" data-execution_count="30">
+<div id="14b174a5" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>X_full <span class="op">=</span> pd.read_csv(<span class="st">'../data/X_test.csv'</span>)</span>
@@ -425,7 +425,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="qué-también-aprendió-el-modelo">4. Qué también aprendió el modelo</h2>
 <section id="curva-precision---recall" class="level3">
 <h3 class="anchored" data-anchor-id="curva-precision---recall">Curva Precision - Recall</h3>
-<div id="7a1275bb" class="cell" data-execution_count="31">
+<div id="7a1275bb" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>precision_curve, recall_curve, thresholds <span class="op">=</span> precision_recall_curve(y_test, probabilidades)</span>
@@ -486,7 +486,7 @@ En umbral 0.20: Precision=0.370, Recall=0.929</code></pre>
 <h3 class="anchored" data-anchor-id="validación-externa-cruce-con-datos-oficiales-nasajpl">Validación externa: cruce con datos oficiales NASA/JPL</h3>
 <p>Cruce del top 100 del modelo contra la lista oficial de close approaches de NASA/JPL CNEOS para verificar si el modelo identifica los mismos objetos que NASA considera técnicamente peligrosos.</p>
 <p>Fuente: <a href="https://ssd-api.jpl.nasa.gov/doc/cad.html">NASA/JPL Small Body Database API</a></p>
-<div id="6fb4756d" class="cell" data-execution_count="32">
+<div id="6fb4756d" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Top 100 del modelo</span></span>

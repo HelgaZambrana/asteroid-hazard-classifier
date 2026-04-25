@@ -206,7 +206,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="carga-de-datos-procesados" class="level2">
 <h2 class="anchored" data-anchor-id="carga-de-datos-procesados">1. Carga de datos procesados</h2>
-<div id="bce6e387" class="cell" data-execution_count="19">
+<div id="bce6e387" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -251,7 +251,7 @@ y_test:  (4524,)</code></pre>
 <section id="mlflow-experiment-tracking" class="level2">
 <h2 class="anchored" data-anchor-id="mlflow-experiment-tracking">2. MLflow Experiment Tracking</h2>
 <p>Cada entrenamiento se registra en MLflow con sus parámetros y métricas. Esto permite comparar experimentos de forma sistemática y reproducible, replicando el flujo de trabajo estándar en equipos de ML.</p>
-<div id="ef8664de" class="cell" data-execution_count="20">
+<div id="ef8664de" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
@@ -295,7 +295,7 @@ y_test:  (4524,)</code></pre>
 </section>
 <section id="entrenamiento-y-evaluación-de-modelos" class="level2">
 <h2 class="anchored" data-anchor-id="entrenamiento-y-evaluación-de-modelos">3. Entrenamiento y evaluación de modelos</h2>
-<div id="aea8bcbd" class="cell" data-execution_count="21">
+<div id="aea8bcbd" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>scale_pos_weight <span class="op">=</span> y_train.value_counts()[<span class="va">False</span>] <span class="op">/</span> y_train.value_counts()[<span class="va">True</span>]</span>
@@ -324,8 +324,8 @@ y_test:  (4524,)</code></pre>
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    resultados[nombre] <span class="op">=</span> y_pred</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>2026/04/25 13:41:08 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
-2026/04/25 13:41:08 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html</code></pre>
+<pre><code>2026/04/25 20:27:58 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
+2026/04/25 20:27:58 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -341,10 +341,10 @@ weighted avg       0.96      0.88      0.90      4524
 </code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>2026/04/25 13:41:10 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
-2026/04/25 13:41:10 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html
-2026/04/25 13:41:12 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
-2026/04/25 13:41:12 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html</code></pre>
+<pre><code>2026/04/25 20:28:00 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
+2026/04/25 20:28:00 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html
+2026/04/25 20:28:02 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
+2026/04/25 20:28:02 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -371,8 +371,8 @@ weighted avg       0.96      0.93      0.94      4524
 </code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>2026/04/25 13:41:13 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
-2026/04/25 13:41:13 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html</code></pre>
+<pre><code>2026/04/25 20:28:03 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
+2026/04/25 20:28:03 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -388,8 +388,8 @@ weighted avg       0.96      0.91      0.93      4524
 </code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>2026/04/25 13:41:19 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
-2026/04/25 13:41:19 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html</code></pre>
+<pre><code>2026/04/25 20:28:09 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
+2026/04/25 20:28:09 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -408,7 +408,7 @@ weighted avg       0.96      0.87      0.90      4524
 </section>
 <section id="comparativa-de-modelos" class="level2">
 <h2 class="anchored" data-anchor-id="comparativa-de-modelos">4. Comparativa de modelos</h2>
-<div id="67750d57" class="cell" data-execution_count="22">
+<div id="67750d57" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>resumen <span class="op">=</span> []</span>
@@ -434,7 +434,7 @@ weighted avg       0.96      0.87      0.90      4524
 Regresion Logistica      0.306   0.972         0.466     0.698</code></pre>
 </div>
 </div>
-<div id="4ca36535" class="cell" data-execution_count="23">
+<div id="4ca36535" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"MLflow version:"</span>, mlflow.__version__)</span>
@@ -462,11 +462,11 @@ Runs: 10
   - XGBoost: {'precision_peligroso': 0.4144329896907217, 'recall_peligroso': 0.7976190476190477, 'f1_peligroso': 0.5454545454545454, 'f1_macro': 0.7525732599730914}
   - Random Forest: {'precision_peligroso': 0.6339869281045751, 'recall_peligroso': 0.38492063492063494, 'f1_peligroso': 0.47901234567901235, 'f1_macro': 0.7272997630280981}
   - Regresion Logistica: {'precision_peligroso': 0.30625, 'recall_peligroso': 0.9722222222222222, 'f1_peligroso': 0.46577946768060835, 'f1_macro': 0.6977471625546614}
-  - SVM: {'precision_peligroso': 0.30450669914738127, 'recall_peligroso': 0.9920634920634921, 'f1_peligroso': 0.4659832246039143, 'f1_macro': 0.6970848570694719}
-  - LightGBM: {'precision_peligroso': 0.3637846655791191, 'recall_peligroso': 0.8849206349206349, 'f1_peligroso': 0.5156069364161849, 'f1_macro': 0.7322141192402165}
-  - XGBoost: {'precision_peligroso': 0.40765765765765766, 'recall_peligroso': 0.7182539682539683, 'f1_peligroso': 0.5201149425287356, 'f1_macro': 0.7400718322026157}
-  - Random Forest: {'precision_peligroso': 0.635036496350365, 'recall_peligroso': 0.34523809523809523, 'f1_peligroso': 0.4473007712082262, 'f1_macro': 0.7112412894480471}
-  - Regresion Logistica: {'precision_peligroso': 0.2995169082125604, 'recall_peligroso': 0.9841269841269841, 'f1_peligroso': 0.45925925925925926, 'f1_macro': 0.6930014309341956}
+  - SVM: {'precision_peligroso': 0.30572472594397077, 'recall_peligroso': 0.996031746031746, 'f1_peligroso': 0.4678471575023299, 'f1_macro': 0.6981242057104126}
+  - LightGBM: {'precision_peligroso': 0.3772357723577236, 'recall_peligroso': 0.9206349206349206, 'f1_peligroso': 0.5351787773933102, 'f1_macro': 0.7429591478947972}
+  - XGBoost: {'precision_peligroso': 0.4144329896907217, 'recall_peligroso': 0.7976190476190477, 'f1_peligroso': 0.5454545454545454, 'f1_macro': 0.7525732599730914}
+  - Random Forest: {'precision_peligroso': 0.6339869281045751, 'recall_peligroso': 0.38492063492063494, 'f1_peligroso': 0.47901234567901235, 'f1_macro': 0.7272997630280981}
+  - Regresion Logistica: {'precision_peligroso': 0.30625, 'recall_peligroso': 0.9722222222222222, 'f1_peligroso': 0.46577946768060835, 'f1_macro': 0.6977471625546614}
 
 Experimento: Default (ID: 0)
 Runs: 0</code></pre>
@@ -476,7 +476,7 @@ Runs: 0</code></pre>
 <section id="matriz-de-confusión-xgboost" class="level2">
 <h2 class="anchored" data-anchor-id="matriz-de-confusión-xgboost">5. Matriz de confusión — XGBoost</h2>
 <p>XGBoost fue seleccionado como modelo principal por F1 Macro 0.753, el más alto del benchmark. La matriz de confusión desagrega los resultados en verdaderos positivos, falsos positivos, verdaderos negativos y falsos negativos, permitiendo evaluar el comportamiento del modelo en cada clase por separado.</p>
-<div id="0e860bc7" class="cell" data-execution_count="24">
+<div id="0e860bc7" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>cm <span class="op">=</span> confusion_matrix(y_test, resultados[<span class="st">'XGBoost'</span>])</span>
@@ -499,7 +499,7 @@ Runs: 0</code></pre>
 <section id="hyperparameter-tuning-gridsearchcv" class="level2">
 <h2 class="anchored" data-anchor-id="hyperparameter-tuning-gridsearchcv">6. Hyperparameter Tuning — GridSearchCV</h2>
 <p>Búsqueda exhaustiva sobre 27 combinaciones de hiperparámetros con validación cruzada de 5 folds. GridSearchCV garantiza que la selección de hiperparámetros no depende de un split particular del dataset.</p>
-<div id="90499a74" class="cell" data-execution_count="25">
+<div id="90499a74" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {</span>
@@ -537,7 +537,7 @@ Mejor F1 Macro en cross-validation: 0.7454</code></pre>
 </section>
 <section id="evaluación-del-modelo-tuneado" class="level2">
 <h2 class="anchored" data-anchor-id="evaluación-del-modelo-tuneado">7. Evaluación del modelo tuneado</h2>
-<div id="d4fec761" class="cell" data-execution_count="26">
+<div id="d4fec761" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>xgb_final <span class="op">=</span> XGBClassifier(</span>
@@ -570,7 +570,7 @@ weighted avg       0.95      0.93      0.94      4524
 </div>
 </div>
 <p>GridSearchCV no mejoró el modelo base en F1 Macro (0.75 vs 0.75). El tuning bayesiano con Optuna se evalúa en 07_optuna.ipynb como alternativa más eficiente para explorar el espacio de hiperparámetros.</p>
-<div id="73f10744" class="cell" data-execution_count="27">
+<div id="73f10744" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> joblib</span>

@@ -199,7 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Análisis de interpretabilidad del modelo XGBoost usando SHAP (SHapley Additive exPlanations). El objetivo es entender qué features determinan cada predicción, tanto a nivel global como a nivel de observación individual.</p>
 <section id="carga-del-modelo-y-los-datos" class="level2">
 <h2 class="anchored" data-anchor-id="carga-del-modelo-y-los-datos">1. Carga del modelo y los datos</h2>
-<div id="5a225ced" class="cell" data-execution_count="17">
+<div id="5a225ced" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shap</span>
@@ -233,7 +233,7 @@ X_test: (4524, 4)</code></pre>
 <h2 class="anchored" data-anchor-id="shap-values-treeexplainer">2. SHAP Values — TreeExplainer</h2>
 <p>Se usa TreeExplainer, el explicador optimizado para modelos basados en árboles. Calcula los SHAP values exactos aprovechando la estructura del árbol, a diferencia del explicador genérico que usa aproximaciones por muestreo.</p>
 <p>Cada SHAP value representa la contribución marginal de una feature a la predicción de una observación específica, con signo positivo indicando contribución hacia la clase peligroso y negativo hacia no peligroso.</p>
-<div id="069319c0" class="cell" data-execution_count="18">
+<div id="069319c0" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>explainer <span class="op">=</span> shap.TreeExplainer(modelo)</span>
@@ -250,7 +250,7 @@ Shape de shap_values: (4524, 4)</code></pre>
 </section>
 <section id="summary-plot-importancia-global-de-features" class="level2">
 <h2 class="anchored" data-anchor-id="summary-plot-importancia-global-de-features">3. Summary Plot — importancia global de features</h2>
-<div id="c667fe8c" class="cell" data-execution_count="19">
+<div id="c667fe8c" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
@@ -267,7 +267,7 @@ Shape de shap_values: (4524, 4)</code></pre>
 </div>
 </div>
 </div>
-<div id="1f01c970" class="cell" data-execution_count="20">
+<div id="1f01c970" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> modelo.predict(X_test)</span>
@@ -299,7 +299,7 @@ Shape de shap_values: (4524, 4)</code></pre>
 <section id="waterfall-plot-análisis-de-un-falso-negativo" class="level2">
 <h2 class="anchored" data-anchor-id="waterfall-plot-análisis-de-un-falso-negativo">4. Waterfall Plot — análisis de un falso negativo</h2>
 <p>Se selecciona un falso negativo para análisis individual: un asteroide clasificado como no peligroso por el modelo siendo peligroso en realidad. El waterfall plot descompone la predicción en las contribuciones individuales de cada feature.</p>
-<div id="13defc33" class="cell" data-execution_count="21">
+<div id="13defc33" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tomamos el primer falso negativo</span></span>
@@ -325,7 +325,7 @@ El modelo predijo: 0</code></pre>
 </div>
 <section id="por-qué-el-modelo-no-lo-detectó" class="level3">
 <h3 class="anchored" data-anchor-id="por-qué-el-modelo-no-lo-detectó">¿Por qué el modelo no lo detectó?</h3>
-<div id="72427f94" class="cell" data-execution_count="22">
+<div id="72427f94" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>explainer_single <span class="op">=</span> shap.TreeExplainer(modelo)</span>
@@ -354,7 +354,7 @@ El modelo predijo: 0</code></pre>
 <section id="ajuste-del-umbral-de-decisión" class="level2">
 <h2 class="anchored" data-anchor-id="ajuste-del-umbral-de-decisión">5. Ajuste del umbral de decisión</h2>
 <p>El umbral de decisión por defecto es 0.50. En el contexto de detección de asteroides peligrosos, el costo de un falso negativo es significativamente mayor al de un falso positivo. Se evalúan umbrales entre 0.20 y 0.50 para analizar el trade-off precision/recall.</p>
-<div id="3602f899" class="cell" data-execution_count="23">
+<div id="3602f899" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilidades en lugar de clases</span></span>
@@ -402,7 +402,7 @@ Umbral 0.2:
 <h3 class="anchored" data-anchor-id="umbral-seleccionado-0.20">Umbral seleccionado: 0.20</h3>
 <p>En el contexto de detección de asteroides peligrosos, el costo de un falso negativo es significativamente mayor al de un falso positivo. Se evaluaron umbrales entre 0.20 y 0.50 para analizar el trade-off precision/recall.</p>
 <p>Selección basada en criterio de negocio, no en optimización de F1. Con umbral 0.20 el modelo detecta el 92.9% de los asteroides peligrosos reales (recall 0.929) con una precision de 0.370. La reducción de precision es un costo aceptable dado el contexto crítico de la aplicación.</p>
-<div id="b58f31bf" class="cell" data-execution_count="24">
+<div id="b58f31bf" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>joblib.dump({<span class="st">'modelo'</span>: modelo, <span class="st">'umbral'</span>: <span class="fl">0.20</span>}, <span class="st">'../data/xgboost_final.pkl'</span>)</span>

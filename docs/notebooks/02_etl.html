@@ -200,7 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Fuente:</strong> NASA NeoWs API <strong>Destino:</strong> Supabase (PostgreSQL) <strong>Período:</strong> Enero 2021 → Abril 2026</p>
 <section id="configuración-e-imports" class="level2">
 <h2 class="anchored" data-anchor-id="configuración-e-imports">1. Configuración e imports</h2>
-<div id="7634a565" class="cell" data-execution_count="4">
+<div id="7634a565" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
@@ -217,37 +217,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Verificar que la key cargó bien</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"API Key cargada:"</span>, API_KEY <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>API Key cargada: True</code></pre>
-</div>
 </div>
 </section>
 <section id="funciones-de-extracción-y-transformación" class="level2">
 <h2 class="anchored" data-anchor-id="funciones-de-extracción-y-transformación">2. Funciones de extracción y transformación</h2>
 <p><code>get_asteroids()</code> — wrapper de la API con paginación semanal. La API acepta un máximo de 7 días por request, por lo que se itera en ventanas de 7 días sobre el período completo.</p>
 <p><code>extraer_campos()</code> — normaliza el response JSON y selecciona únicamente los campos relevantes para el modelo, todos en kilómetros.</p>
-<div id="46c0f863" class="cell" data-execution_count="5">
+<div id="46c0f863" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_asteroids(start_date, end_date):</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="st">"https://api.nasa.gov/neo/rest/v1/feed"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> {<span class="st">"start_date"</span>: start_date, <span class="st">"end_date"</span>: end_date, <span class="st">"api_key"</span>: API_KEY}</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.get(url, params<span class="op">=</span>params)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> response.json()[<span class="st">'near_earth_objects'</span>]</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extraer_campos(asteroide):</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    close_approach <span class="op">=</span> asteroide[<span class="st">'close_approach_data'</span>][<span class="dv">0</span>]</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">'id'</span>: asteroide[<span class="st">'id'</span>],</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">'name'</span>: asteroide[<span class="st">'name'</span>],</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">'absolute_magnitude_h'</span>: asteroide[<span class="st">'absolute_magnitude_h'</span>],</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">'diameter_min_km'</span>: asteroide[<span class="st">'estimated_diameter'</span>][<span class="st">'kilometers'</span>][<span class="st">'estimated_diameter_min'</span>],</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">'diameter_max_km'</span>: asteroide[<span class="st">'estimated_diameter'</span>][<span class="st">'kilometers'</span>][<span class="st">'estimated_diameter_max'</span>],</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">'velocity_km_per_hour'</span>: <span class="bu">float</span>(close_approach[<span class="st">'relative_velocity'</span>][<span class="st">'kilometers_per_hour'</span>]),</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">'miss_distance_km'</span>: <span class="bu">float</span>(close_approach[<span class="st">'miss_distance'</span>][<span class="st">'kilometers'</span>]),</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">'close_approach_date'</span>: close_approach[<span class="st">'close_approach_date'</span>],</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'is_potentially_hazardous'</span>: asteroide[<span class="st">'is_potentially_hazardous_asteroid'</span>]</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_asteroids(start_date, end_date):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="st">"https://api.nasa.gov/neo/rest/v1/feed"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    params <span class="op">=</span> {<span class="st">"start_date"</span>: start_date, <span class="st">"end_date"</span>: end_date, <span class="st">"api_key"</span>: API_KEY}</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.get(url, params<span class="op">=</span>params)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> response.json()[<span class="st">'near_earth_objects'</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extraer_campos(asteroide):</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    close_approach <span class="op">=</span> asteroide[<span class="st">'close_approach_data'</span>][<span class="dv">0</span>]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">'id'</span>: asteroide[<span class="st">'id'</span>],</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">'name'</span>: asteroide[<span class="st">'name'</span>],</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">'absolute_magnitude_h'</span>: asteroide[<span class="st">'absolute_magnitude_h'</span>],</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">'diameter_min_km'</span>: asteroide[<span class="st">'estimated_diameter'</span>][<span class="st">'kilometers'</span>][<span class="st">'estimated_diameter_min'</span>],</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">'diameter_max_km'</span>: asteroide[<span class="st">'estimated_diameter'</span>][<span class="st">'kilometers'</span>][<span class="st">'estimated_diameter_max'</span>],</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">'velocity_km_per_hour'</span>: <span class="bu">float</span>(close_approach[<span class="st">'relative_velocity'</span>][<span class="st">'kilometers_per_hour'</span>]),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">'miss_distance_km'</span>: <span class="bu">float</span>(close_approach[<span class="st">'miss_distance'</span>][<span class="st">'kilometers'</span>]),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">'close_approach_date'</span>: close_approach[<span class="st">'close_approach_date'</span>],</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'is_potentially_hazardous'</span>: asteroide[<span class="st">'is_potentially_hazardous_asteroid'</span>]</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>
@@ -256,355 +253,58 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Decisión de diseño: deduplicación por asteroide:</strong> La API organiza los datos por fecha de close approach. Un mismo asteroide puede aparecer múltiples veces si tuvo varios acercamientos en el período.</p>
 <p>La unidad de análisis del modelo es el asteroide, no el evento de acercamiento. <code>is_potentially_hazardous</code> es una propiedad fija del objeto orbital, no varía entre acercamientos. Se conserva el primer registro por asteroide (<code>drop_duplicates(subset='id', keep='first')</code>).</p>
 <p>En un sistema productivo, los eventos de acercamiento vivirían en una tabla separada con FK → asteroides. Esta simplificación está justificada para el alcance del proyecto.</p>
-<div id="7f268a0f" class="cell" data-execution_count="6">
+<div id="7f268a0f" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>load_dotenv(dotenv_path<span class="op">=</span><span class="st">'../.env'</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>SUPABASE_URL <span class="op">=</span> os.getenv(<span class="st">"SUPABASE_URL"</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>SUPABASE_KEY <span class="op">=</span> os.getenv(<span class="st">"SUPABASE_KEY"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>supabase <span class="op">=</span> create_client(SUPABASE_URL, SUPABASE_KEY)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> datetime(<span class="dv">2021</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> datetime(<span class="dv">2026</span>, <span class="dv">3</span>, <span class="dv">31</span>)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>todos_los_asteroides <span class="op">=</span> []</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>current <span class="op">=</span> start</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> current <span class="op">&lt;</span> end:</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    siguiente <span class="op">=</span> <span class="bu">min</span>(current <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">7</span>), end)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    datos <span class="op">=</span> get_asteroids(current.strftime(<span class="st">'%Y-%m-</span><span class="sc">%d</span><span class="st">'</span>), siguiente.strftime(<span class="st">'%Y-%m-</span><span class="sc">%d</span><span class="st">'</span>))</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fecha, asteroides <span class="kw">in</span> datos.items():</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> asteroide <span class="kw">in</span> asteroides:</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>            todos_los_asteroides.append(extraer_campos(asteroide))</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"✓ </span><span class="sc">{</span>current<span class="sc">.</span>strftime(<span class="st">'%Y-%m-</span><span class="sc">%d</span><span class="st">'</span>)<span class="sc">}</span><span class="ss"> — acumulados: </span><span class="sc">{</span><span class="bu">len</span>(todos_los_asteroides)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    current <span class="op">=</span> siguiente <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="fl">0.5</span>)</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(todos_los_asteroides)</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Cuántos registros teníamos</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Antes de deduplicar:"</span>, <span class="bu">len</span>(df))</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Nos quedamos con el primer acercamiento de cada asteroide</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop_duplicates(subset<span class="op">=</span><span class="st">'id'</span>, keep<span class="op">=</span><span class="st">'first'</span>)</span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Cuántos quedaron</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Después de deduplicar:"</span>, <span class="bu">len</span>(df))</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Cargando en Supabase..."</span>)</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>batch_size <span class="op">=</span> <span class="dv">500</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(df), batch_size):</span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    batch <span class="op">=</span> df.iloc[i:i<span class="op">+</span>batch_size].to_dict(orient<span class="op">=</span><span class="st">'records'</span>)</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    supabase.table(<span class="st">'asteroids'</span>).upsert(batch).execute()</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  ✓ Insertados registros </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> a </span><span class="sc">{</span>i<span class="op">+</span><span class="bu">len</span>(batch)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Listo"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>load_dotenv(dotenv_path<span class="op">=</span><span class="st">'../.env'</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>SUPABASE_URL <span class="op">=</span> os.getenv(<span class="st">"SUPABASE_URL"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>SUPABASE_KEY <span class="op">=</span> os.getenv(<span class="st">"SUPABASE_KEY"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>supabase <span class="op">=</span> create_client(SUPABASE_URL, SUPABASE_KEY)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> datetime(<span class="dv">2021</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> datetime(<span class="dv">2026</span>, <span class="dv">3</span>, <span class="dv">31</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>todos_los_asteroides <span class="op">=</span> []</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>current <span class="op">=</span> start</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> current <span class="op">&lt;</span> end:</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    siguiente <span class="op">=</span> <span class="bu">min</span>(current <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">7</span>), end)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    datos <span class="op">=</span> get_asteroids(current.strftime(<span class="st">'%Y-%m-</span><span class="sc">%d</span><span class="st">'</span>), siguiente.strftime(<span class="st">'%Y-%m-</span><span class="sc">%d</span><span class="st">'</span>))</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fecha, asteroides <span class="kw">in</span> datos.items():</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> asteroide <span class="kw">in</span> asteroides:</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            todos_los_asteroides.append(extraer_campos(asteroide))</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"✓ </span><span class="sc">{</span>current<span class="sc">.</span>strftime(<span class="st">'%Y-%m-</span><span class="sc">%d</span><span class="st">'</span>)<span class="sc">}</span><span class="ss"> — acumulados: </span><span class="sc">{</span><span class="bu">len</span>(todos_los_asteroides)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    current <span class="op">=</span> siguiente <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="fl">0.5</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(todos_los_asteroides)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Cuántos registros teníamos</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Antes de deduplicar:"</span>, <span class="bu">len</span>(df))</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Nos quedamos con el primer acercamiento de cada asteroide</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop_duplicates(subset<span class="op">=</span><span class="st">'id'</span>, keep<span class="op">=</span><span class="st">'first'</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Cuántos quedaron</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Después de deduplicar:"</span>, <span class="bu">len</span>(df))</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Cargando en Supabase..."</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>batch_size <span class="op">=</span> <span class="dv">500</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(df), batch_size):</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    batch <span class="op">=</span> df.iloc[i:i<span class="op">+</span>batch_size].to_dict(orient<span class="op">=</span><span class="st">'records'</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    supabase.table(<span class="st">'asteroids'</span>).upsert(batch).execute()</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  ✓ Insertados registros </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> a </span><span class="sc">{</span>i<span class="op">+</span><span class="bu">len</span>(batch)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Listo"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>✓ 2021-01-01 — acumulados: 159
-✓ 2021-01-09 — acumulados: 308
-✓ 2021-01-17 — acumulados: 444
-✓ 2021-01-25 — acumulados: 572
-✓ 2021-02-02 — acumulados: 731
-✓ 2021-02-10 — acumulados: 889
-✓ 2021-02-18 — acumulados: 1048
-✓ 2021-02-26 — acumulados: 1195
-✓ 2021-03-06 — acumulados: 1345
-✓ 2021-03-14 — acumulados: 1495
-✓ 2021-03-22 — acumulados: 1647
-✓ 2021-03-30 — acumulados: 1804
-✓ 2021-04-07 — acumulados: 1966
-✓ 2021-04-15 — acumulados: 2142
-✓ 2021-04-23 — acumulados: 2298
-✓ 2021-05-01 — acumulados: 2453
-✓ 2021-05-09 — acumulados: 2594
-✓ 2021-05-17 — acumulados: 2739
-✓ 2021-05-25 — acumulados: 2878
-✓ 2021-06-02 — acumulados: 3017
-✓ 2021-06-10 — acumulados: 3149
-✓ 2021-06-18 — acumulados: 3278
-✓ 2021-06-26 — acumulados: 3383
-✓ 2021-07-04 — acumulados: 3506
-✓ 2021-07-12 — acumulados: 3634
-✓ 2021-07-20 — acumulados: 3757
-✓ 2021-07-28 — acumulados: 3915
-✓ 2021-08-05 — acumulados: 4044
-✓ 2021-08-13 — acumulados: 4166
-✓ 2021-08-21 — acumulados: 4349
-✓ 2021-08-29 — acumulados: 4505
-✓ 2021-09-06 — acumulados: 4732
-✓ 2021-09-14 — acumulados: 4923
-✓ 2021-09-22 — acumulados: 5096
-✓ 2021-09-30 — acumulados: 5271
-✓ 2021-10-08 — acumulados: 5468
-✓ 2021-10-16 — acumulados: 5668
-✓ 2021-10-24 — acumulados: 5847
-✓ 2021-11-01 — acumulados: 6071
-✓ 2021-11-09 — acumulados: 6251
-✓ 2021-11-17 — acumulados: 6412
-✓ 2021-11-25 — acumulados: 6584
-✓ 2021-12-03 — acumulados: 6763
-✓ 2021-12-11 — acumulados: 6890
-✓ 2021-12-19 — acumulados: 7005
-✓ 2021-12-27 — acumulados: 7147
-✓ 2022-01-04 — acumulados: 7270
-✓ 2022-01-12 — acumulados: 7416
-✓ 2022-01-20 — acumulados: 7574
-✓ 2022-01-28 — acumulados: 7743
-✓ 2022-02-05 — acumulados: 7903
-✓ 2022-02-13 — acumulados: 8049
-✓ 2022-02-21 — acumulados: 8217
-✓ 2022-03-01 — acumulados: 8390
-✓ 2022-03-09 — acumulados: 8537
-✓ 2022-03-17 — acumulados: 8670
-✓ 2022-03-25 — acumulados: 8858
-✓ 2022-04-02 — acumulados: 9015
-✓ 2022-04-10 — acumulados: 9149
-✓ 2022-04-18 — acumulados: 9308
-✓ 2022-04-26 — acumulados: 9478
-✓ 2022-05-04 — acumulados: 9612
-✓ 2022-05-12 — acumulados: 9745
-✓ 2022-05-20 — acumulados: 9876
-✓ 2022-05-28 — acumulados: 10019
-✓ 2022-06-05 — acumulados: 10137
-✓ 2022-06-13 — acumulados: 10243
-✓ 2022-06-21 — acumulados: 10372
-✓ 2022-06-29 — acumulados: 10480
-✓ 2022-07-07 — acumulados: 10603
-✓ 2022-07-15 — acumulados: 10720
-✓ 2022-07-23 — acumulados: 10853
-✓ 2022-07-31 — acumulados: 10965
-✓ 2022-08-08 — acumulados: 11105
-✓ 2022-08-16 — acumulados: 11259
-✓ 2022-08-24 — acumulados: 11422
-✓ 2022-09-01 — acumulados: 11564
-✓ 2022-09-09 — acumulados: 11749
-✓ 2022-09-17 — acumulados: 11938
-✓ 2022-09-25 — acumulados: 12163
-✓ 2022-10-03 — acumulados: 12356
-✓ 2022-10-11 — acumulados: 12536
-✓ 2022-10-19 — acumulados: 12793
-✓ 2022-10-27 — acumulados: 13014
-✓ 2022-11-04 — acumulados: 13206
-✓ 2022-11-12 — acumulados: 13356
-✓ 2022-11-20 — acumulados: 13546
-✓ 2022-11-28 — acumulados: 13708
-✓ 2022-12-06 — acumulados: 13835
-✓ 2022-12-14 — acumulados: 13995
-✓ 2022-12-22 — acumulados: 14150
-✓ 2022-12-30 — acumulados: 14270
-✓ 2023-01-07 — acumulados: 14395
-✓ 2023-01-15 — acumulados: 14508
-✓ 2023-01-23 — acumulados: 14648
-✓ 2023-01-31 — acumulados: 14785
-✓ 2023-02-08 — acumulados: 14957
-✓ 2023-02-16 — acumulados: 15083
-✓ 2023-02-24 — acumulados: 15239
-✓ 2023-03-04 — acumulados: 15390
-✓ 2023-03-12 — acumulados: 15540
-✓ 2023-03-20 — acumulados: 15715
-✓ 2023-03-28 — acumulados: 15874
-✓ 2023-04-05 — acumulados: 16044
-✓ 2023-04-13 — acumulados: 16203
-✓ 2023-04-21 — acumulados: 16368
-✓ 2023-04-29 — acumulados: 16502
-✓ 2023-05-07 — acumulados: 16649
-✓ 2023-05-15 — acumulados: 16777
-✓ 2023-05-23 — acumulados: 16946
-✓ 2023-05-31 — acumulados: 17069
-✓ 2023-06-08 — acumulados: 17193
-✓ 2023-06-16 — acumulados: 17313
-✓ 2023-06-24 — acumulados: 17428
-✓ 2023-07-02 — acumulados: 17520
-✓ 2023-07-10 — acumulados: 17628
-✓ 2023-07-18 — acumulados: 17752
-✓ 2023-07-26 — acumulados: 17872
-✓ 2023-08-03 — acumulados: 17994
-✓ 2023-08-11 — acumulados: 18151
-✓ 2023-08-19 — acumulados: 18289
-✓ 2023-08-27 — acumulados: 18455
-✓ 2023-09-04 — acumulados: 18654
-✓ 2023-09-12 — acumulados: 18852
-✓ 2023-09-20 — acumulados: 19058
-✓ 2023-09-28 — acumulados: 19261
-✓ 2023-10-06 — acumulados: 19484
-✓ 2023-10-14 — acumulados: 19704
-✓ 2023-10-22 — acumulados: 19909
-✓ 2023-10-30 — acumulados: 20089
-✓ 2023-11-07 — acumulados: 20278
-✓ 2023-11-15 — acumulados: 20455
-✓ 2023-11-23 — acumulados: 20602
-✓ 2023-12-01 — acumulados: 20770
-✓ 2023-12-09 — acumulados: 20942
-✓ 2023-12-17 — acumulados: 21082
-✓ 2023-12-25 — acumulados: 21201
-✓ 2024-01-02 — acumulados: 21325
-✓ 2024-01-10 — acumulados: 21484
-✓ 2024-01-18 — acumulados: 21626
-✓ 2024-01-26 — acumulados: 21784
-✓ 2024-02-03 — acumulados: 21932
-✓ 2024-02-11 — acumulados: 22096
-✓ 2024-02-19 — acumulados: 22229
-✓ 2024-02-27 — acumulados: 22384
-✓ 2024-03-06 — acumulados: 22516
-✓ 2024-03-14 — acumulados: 22655
-✓ 2024-03-22 — acumulados: 22785
-✓ 2024-03-30 — acumulados: 22934
-✓ 2024-04-07 — acumulados: 23106
-✓ 2024-04-15 — acumulados: 23267
-✓ 2024-04-23 — acumulados: 23429
-✓ 2024-05-01 — acumulados: 23565
-✓ 2024-05-09 — acumulados: 23703
-✓ 2024-05-17 — acumulados: 23819
-✓ 2024-05-25 — acumulados: 23939
-✓ 2024-06-02 — acumulados: 24061
-✓ 2024-06-10 — acumulados: 24168
-✓ 2024-06-18 — acumulados: 24283
-✓ 2024-06-26 — acumulados: 24404
-✓ 2024-07-04 — acumulados: 24519
-✓ 2024-07-12 — acumulados: 24618
-✓ 2024-07-20 — acumulados: 24722
-✓ 2024-07-28 — acumulados: 24852
-✓ 2024-08-05 — acumulados: 24976
-✓ 2024-08-13 — acumulados: 25102
-✓ 2024-08-21 — acumulados: 25251
-✓ 2024-08-29 — acumulados: 25417
-✓ 2024-09-06 — acumulados: 25605
-✓ 2024-09-14 — acumulados: 25789
-✓ 2024-09-22 — acumulados: 25987
-✓ 2024-09-30 — acumulados: 26229
-✓ 2024-10-08 — acumulados: 26434
-✓ 2024-10-16 — acumulados: 26608
-✓ 2024-10-24 — acumulados: 26807
-✓ 2024-11-01 — acumulados: 26964
-✓ 2024-11-09 — acumulados: 27119
-✓ 2024-11-17 — acumulados: 27274
-✓ 2024-11-25 — acumulados: 27447
-✓ 2024-12-03 — acumulados: 27607
-✓ 2024-12-11 — acumulados: 27754
-✓ 2024-12-19 — acumulados: 27904
-✓ 2024-12-27 — acumulados: 28056
-✓ 2025-01-04 — acumulados: 28162
-✓ 2025-01-12 — acumulados: 28302
-✓ 2025-01-20 — acumulados: 28425
-✓ 2025-01-28 — acumulados: 28558
-✓ 2025-02-05 — acumulados: 28677
-✓ 2025-02-13 — acumulados: 28823
-✓ 2025-02-21 — acumulados: 28981
-✓ 2025-03-01 — acumulados: 29120
-✓ 2025-03-09 — acumulados: 29259
-✓ 2025-03-17 — acumulados: 29394
-✓ 2025-03-25 — acumulados: 29542
-✓ 2025-04-02 — acumulados: 29661
-✓ 2025-04-10 — acumulados: 29774
-✓ 2025-04-18 — acumulados: 29921
-✓ 2025-04-26 — acumulados: 30061
-✓ 2025-05-04 — acumulados: 30175
-✓ 2025-05-12 — acumulados: 30281
-✓ 2025-05-20 — acumulados: 30400
-✓ 2025-05-28 — acumulados: 30505
-✓ 2025-06-05 — acumulados: 30592
-✓ 2025-06-13 — acumulados: 30692
-✓ 2025-06-21 — acumulados: 30792
-✓ 2025-06-29 — acumulados: 30904
-✓ 2025-07-07 — acumulados: 31028
-✓ 2025-07-15 — acumulados: 31117
-✓ 2025-07-23 — acumulados: 31232
-✓ 2025-07-31 — acumulados: 31354
-✓ 2025-08-08 — acumulados: 31483
-✓ 2025-08-16 — acumulados: 31613
-✓ 2025-08-24 — acumulados: 31760
-✓ 2025-09-01 — acumulados: 31892
-✓ 2025-09-09 — acumulados: 32052
-✓ 2025-09-17 — acumulados: 32213
-✓ 2025-09-25 — acumulados: 32394
-✓ 2025-10-03 — acumulados: 32548
-✓ 2025-10-11 — acumulados: 32709
-✓ 2025-10-19 — acumulados: 32900
-✓ 2025-10-27 — acumulados: 33046
-✓ 2025-11-04 — acumulados: 33196
-✓ 2025-11-12 — acumulados: 33341
-✓ 2025-11-20 — acumulados: 33498
-✓ 2025-11-28 — acumulados: 33635
-✓ 2025-12-06 — acumulados: 33785
-✓ 2025-12-14 — acumulados: 33932
-✓ 2025-12-22 — acumulados: 34070
-✓ 2025-12-30 — acumulados: 34214
-✓ 2026-01-07 — acumulados: 34354
-✓ 2026-01-15 — acumulados: 34483
-✓ 2026-01-23 — acumulados: 34598
-✓ 2026-01-31 — acumulados: 34724
-✓ 2026-02-08 — acumulados: 34852
-✓ 2026-02-16 — acumulados: 34986
-✓ 2026-02-24 — acumulados: 35120
-✓ 2026-03-04 — acumulados: 35279
-✓ 2026-03-12 — acumulados: 35474
-✓ 2026-03-20 — acumulados: 35624
-✓ 2026-03-28 — acumulados: 35690
-Antes de deduplicar: 35690
-Después de deduplicar: 22617
-
-Cargando en Supabase...
-  ✓ Insertados registros 0 a 500
-  ✓ Insertados registros 500 a 1000
-  ✓ Insertados registros 1000 a 1500
-  ✓ Insertados registros 1500 a 2000
-  ✓ Insertados registros 2000 a 2500
-  ✓ Insertados registros 2500 a 3000
-  ✓ Insertados registros 3000 a 3500
-  ✓ Insertados registros 3500 a 4000
-  ✓ Insertados registros 4000 a 4500
-  ✓ Insertados registros 4500 a 5000
-  ✓ Insertados registros 5000 a 5500
-  ✓ Insertados registros 5500 a 6000
-  ✓ Insertados registros 6000 a 6500
-  ✓ Insertados registros 6500 a 7000
-  ✓ Insertados registros 7000 a 7500
-  ✓ Insertados registros 7500 a 8000
-  ✓ Insertados registros 8000 a 8500
-  ✓ Insertados registros 8500 a 9000
-  ✓ Insertados registros 9000 a 9500
-  ✓ Insertados registros 9500 a 10000
-  ✓ Insertados registros 10000 a 10500
-  ✓ Insertados registros 10500 a 11000
-  ✓ Insertados registros 11000 a 11500
-  ✓ Insertados registros 11500 a 12000
-  ✓ Insertados registros 12000 a 12500
-  ✓ Insertados registros 12500 a 13000
-  ✓ Insertados registros 13000 a 13500
-  ✓ Insertados registros 13500 a 14000
-  ✓ Insertados registros 14000 a 14500
-  ✓ Insertados registros 14500 a 15000
-  ✓ Insertados registros 15000 a 15500
-  ✓ Insertados registros 15500 a 16000
-  ✓ Insertados registros 16000 a 16500
-  ✓ Insertados registros 16500 a 17000
-  ✓ Insertados registros 17000 a 17500
-  ✓ Insertados registros 17500 a 18000
-  ✓ Insertados registros 18000 a 18500
-  ✓ Insertados registros 18500 a 19000
-  ✓ Insertados registros 19000 a 19500
-  ✓ Insertados registros 19500 a 20000
-  ✓ Insertados registros 20000 a 20500
-  ✓ Insertados registros 20500 a 21000
-  ✓ Insertados registros 21000 a 21500
-  ✓ Insertados registros 21500 a 22000
-  ✓ Insertados registros 22000 a 22500
-  ✓ Insertados registros 22500 a 22617
-
-Listo</code></pre>
 </div>
-</div>
-<div id="4fc0732e" class="cell" data-execution_count="7">
+<div id="4fc0732e" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">'../data/asteroids_raw.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"CSV guardado en data/asteroids_raw.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">'../data/asteroids_raw.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"CSV guardado en data/asteroids_raw.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>CSV guardado en data/asteroids_raw.csv</code></pre>
-</div>
 </div>
 </section>
 <section id="nota-sobre-reproducibilidad" class="level2">

@@ -199,7 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Reconocimiento de la API NeoWs (Near Earth Object Web Service) previo a la construcción del pipeline ETL. El objetivo es entender la estructura del response y definir qué campos son relevantes para el modelo.</p>
 <section id="configuración-y-conexión" class="level2">
 <h2 class="anchored" data-anchor-id="configuración-y-conexión">Configuración y conexión</h2>
-<div id="cef8dd43" class="cell" data-execution_count="3">
+<div id="cef8dd43" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
@@ -240,7 +240,7 @@ dict_keys(['links', 'element_count', 'near_earth_objects'])</code></pre>
 <section id="estructura-de-los-datos" class="level2">
 <h2 class="anchored" data-anchor-id="estructura-de-los-datos">Estructura de los datos</h2>
 <p>Cada objeto devuelto por la API representa un asteroide con un close approach registrado en el rango de fechas consultado. Los datos vienen organizados por fecha, con múltiples asteroides por día.</p>
-<div id="04595b39" class="cell" data-execution_count="4">
+<div id="04595b39" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> response.json()</span>
