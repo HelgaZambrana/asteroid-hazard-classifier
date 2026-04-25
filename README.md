@@ -31,9 +31,15 @@ El umbral 0.20 fue seleccionado por criterio de negocio: en detección
 de asteroides peligrosos el costo de un falso negativo supera ampliamente
 el costo de una falsa alarma.
 
+## Sitio web
+
+Visualizaciones interactivas disponibles en:
+https://helgazambrana.github.io/asteroid-hazard-classifier
+
 ## Estructura
 
     asteroid-classifier/
+    ├── docs/                           # Sitio web generado por Quarto
     ├── assets/
     │   └── MLFlow.png                  # Screenshot de MLflow experiment tracking
     ├── data/                           # Generado localmente, no se sube al repo
