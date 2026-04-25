@@ -29,3 +29,9 @@ format:
   html:
     theme: darkly
     code-fold: true
+
+jupyter:
+  kernelspec:
+    name: asteroid-venv
+    language: python
+    display_name: "asteroid-classifier (venv)"
