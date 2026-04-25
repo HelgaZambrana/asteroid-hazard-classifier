@@ -1,0 +1,31 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Asteroid Hazard Classifier"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: notebooks/01_api_exploration.ipynb
+        text: API Exploration
+      - href: notebooks/02_etl.ipynb
+        text: ETL
+      - href: notebooks/03_eda.ipynb
+        text: EDA
+      - href: notebooks/04_preprocessing.ipynb
+        text: Preprocessing
+      - href: notebooks/05_models.ipynb
+        text: Models
+      - href: notebooks/06_shap.ipynb
+        text: SHAP
+      - href: notebooks/07_optuna.ipynb
+        text: Optuna
+      - href: notebooks/08_visualizaciones.ipynb
+        text: Visualizations
+
+format:
+  html:
+    theme: darkly
+    code-fold: true
