@@ -9,6 +9,9 @@ data/*.json
 data/*.parquet
 data/*.pkl
 
+notebooks/mlruns/
+mlruns/
+
 mlruns/
 
 .DS_Store
